@@ -1,5 +1,5 @@
 <template>
-       <div class="flex flex-col border rounded-3xl p-8 relative">
+       <div class="flex flex-col border rounded-3xl p-8 relative cursor-pointer transition hover:shadow-xl hover:-translate-y-4">
             <img class=" w-8 absolute top-8 left-8" src="/icons/like_1.svg" alt="like">
             <div class="flex justify-center">
                 <img class="flex w-32" src="/snickers/snickers_1.jpg" alt="snickers">
