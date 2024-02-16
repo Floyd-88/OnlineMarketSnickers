@@ -2,6 +2,8 @@
 import DrawerHeader from './DrawerHeader.vue'
 import DrawerCardsList from './DrawerCardsList.vue'
 import DrawerFooter from './DrawerFooter.vue'
+
+
 </script>
 
 <template>

@@ -1,6 +1,10 @@
 <script setup>
 import CardVue from './CardVue.vue';
 
+defineProps({
+  cards: Array
+})
+
 function onClickisAddBasket() {
   alert('Добавить в корзину')
 }
@@ -12,10 +16,10 @@ function onClickLikeCard() {
 
 <template>
   <div class="grid grid-cols-4 gap-12 pb-8">
-    <CardVue 
-      :photoSnickers="'/snickers/snickers_1.jpg'" 
-      :nameSnickers="'Мужские Кроссовки Nike Blazer Mid Suede'" 
-      :priceSnickers="'12 999'" 
+    <CardVue v-for="card in cards" :key="card.id"
+      :photoSnickers="card.photo" 
+      :nameSnickers="card.name" 
+      :priceSnickers="card.price.toLocaleString()" 
       :isAddBasket="false" 
       :isLikeCard="false"
       :onClickLikeCard="onClickLikeCard"
