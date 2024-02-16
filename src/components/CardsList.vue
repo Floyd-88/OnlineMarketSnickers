@@ -1,16 +1,18 @@
 <script setup>
 import CardVue from './CardVue.vue';
 
+const emit = defineEmits(['onClickLikeCard', 'onClickAddBasket'])
+
 defineProps({
   cards: Array
 })
 
-function onClickisAddBasket() {
-  alert('Добавить в корзину')
+function onClickLikeCard(card) {
+  emit('onClickLikeCard', card)
 }
 
-function onClickLikeCard() {
-  alert('Добавить в закладки')
+function onClickAddBasket(card) {
+  emit('onClickAddBasket', card)
 }
 </script>
 
@@ -20,9 +22,9 @@ function onClickLikeCard() {
       :photoSnickers="card.photo" 
       :nameSnickers="card.name" 
       :priceSnickers="card.price.toLocaleString()" 
-      :isAddBasket="false" 
-      :isLikeCard="false"
-      :onClickLikeCard="onClickLikeCard"
-      :onClickisAddBasket="onClickisAddBasket"/>
+      :isAddBasket="card.isAddBasket" 
+      :isLikeCard="card.isLikeCard"
+      @onClickAddBasket="onClickAddBasket(card)"
+      @onClickLikeCard="onClickLikeCard(card)"/>
   </div>
 </template>

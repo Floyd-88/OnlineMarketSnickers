@@ -6,46 +6,80 @@ import axios from 'axios'
 import { ref, reactive, onMounted, watch } from 'vue'
 
 const cards = ref([])
-
+const isShowBasket = ref(false)
 const filters = reactive({
   searchName: '',
   optionsCard: 'name'
 })
 
+//получение карточек с товаром
 async function getCards() {
   try {
     let params = {
-        sortBy: filters.optionsCard
+      sortBy: filters.optionsCard
     }
-    if(filters.searchName) {
-        params.name = `*${filters.searchName}*`
+    if (filters.searchName) {
+      params.name = `*${filters.searchName}*`
     }
     await axios
       .get('https://f774087b0dcc15d2.mokky.dev/cards', {
         params
       })
-      .then((response) => {
-        cards.value = response.data
+      .then(({ data }) => {
+        data.map((i) => {
+          if (!i.isLikeCard) {
+            i.isLikeCard = false
+          }
+          if (!i.isAddBasket) {
+            i.isAddBasket = false
+          }
         })
-    
+        cards.value = data
+      })
   } catch (err) {
     console.log(err)
   }
 }
 
-let isShowBasket = ref(false)
+//добавление карточки в закладки
+async function addLikeCard(card) {
+  try {
+    card.isLikeCard = !card.isLikeCard
+    await axios.patch(`https://f774087b0dcc15d2.mokky.dev/cards/${card.id}`, card)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+//добавление карточки в корзину
+async function addCardBasket(card) {
+  try {
+    card.isAddBasket = !card.isAddBasket
+    await axios.patch(`https://f774087b0dcc15d2.mokky.dev/cards/${card.id}`, card)
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 function openBasket(bool) {
   isShowBasket.value = bool
 }
 
+function onClickLikeCard(card) {
+  addLikeCard(card)
+}
+
+function onClickAddBasket(card) {
+  addCardBasket(card)
+}
+
 onMounted(() => {
-    getCards()
+  getCards()
 })
 
 watch(filters, () => {
-    getCards()
-    })
+  getCards()
+})
 </script>
 
 <template>
@@ -80,7 +114,7 @@ watch(filters, () => {
         </div>
       </div>
 
-      <CardList :cards="cards" />
+      <CardList :cards="cards" @onClickLikeCard="onClickLikeCard" @onClickAddBasket="onClickAddBasket"/>
     </div>
   </div>
 </template>
