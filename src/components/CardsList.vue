@@ -17,13 +17,10 @@ function onClickAddBasket(card) {
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-12 pb-8">
-    <CardVue v-for="card in cards" :key="card.id"
-      :photoSnickers="card.photo" 
-      :nameSnickers="card.name" 
-      :priceSnickers="card.price.toLocaleString()" 
-      :isAddBasket="card.isAddBasket" 
-      :isLikeCard="card.isLikeCard"
+  <div  class="grid grid-cols-4 gap-12 pb-8">
+    <CardVue 
+      v-for="card in cards" :key="card.id"
+      :card="card"
       @onClickAddBasket="onClickAddBasket(card)"
       @onClickLikeCard="onClickLikeCard(card)"/>
   </div>

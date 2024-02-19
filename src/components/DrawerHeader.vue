@@ -1,10 +1,15 @@
 <script setup>
+import { inject } from 'vue';
+
+
+const openBasket = inject('openBasket')
 </script>
 
 <template>
   <div class="flex items-center gap-4">
     <div>
       <svg
+      @click="openBasket(false)"
       class="opacity-50 hover:opacity-100 cursor-pointer transition hover:-translate-x-1"
         width="16"
         height="14"
