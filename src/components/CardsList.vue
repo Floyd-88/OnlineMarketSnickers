@@ -17,7 +17,7 @@ function onClickAddBasket(card) {
 </script>
 
 <template>
-  <div  class="grid grid-cols-4 gap-12 pb-8">
+  <div v-auto-animate class="grid grid-cols-4 gap-12 pb-8">
     <CardVue 
       v-for="card in cards" :key="card.id"
       :card="card"
