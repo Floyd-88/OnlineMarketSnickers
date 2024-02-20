@@ -7,18 +7,25 @@ import { ref, reactive, onMounted, watch, provide, computed } from 'vue'
 
 const cards = ref([]) //карточки товара
 const basketUser = ref([]) //карточки товара в корзине
+const likeCards = ref([]) //какрточки добавленные в закладки
 const isShowBasket = ref(false) //показывать корзину
-const filters = reactive({ //фильтр и сортировка карточек товара
+const filters = reactive({
+  //фильтр и сортировка карточек товара
   searchName: '',
   optionsCard: 'name'
 })
+const isDisabledBuyBtn = ref(false) //флаг активной кнопки покупки товаров
 
-const bascketCards = computed(() => cards.value.filter((i) => i.isAddBasket))
+const basketCards = computed(() => cards.value.filter((i) => i.isAddBasket))
 
 //получение карточек с товаром
 async function getCards() {
   try {
-    JSON.parse(localStorage.getItem('basket')) ? basketUser.value = JSON.parse(localStorage.getItem('basket')) : []
+    let basket = JSON.parse(localStorage.getItem('basket'))    
+    basket ? basketUser.value = basket : []
+
+    let likeCards = JSON.parse(localStorage.getItem('likeCards'))
+    likeCards ? likeCards.value = likeCards : []
 
     let params = {
       sortBy: filters.optionsCard
@@ -26,20 +33,18 @@ async function getCards() {
     if (filters.searchName) {
       params.name = `*${filters.searchName}*`
     }
+
     await axios
       .get('https://f774087b0dcc15d2.mokky.dev/cards', {
         params
       })
       .then(({ data }) => {
-        if (basketUser.value) {
-          data.map((i) => {
-            basketUser.value.map((k) => {
-              if (i.id == k.id) {
-                i.isAddBasket = k.isAddBasket
-              }
-            })
-          })
-        }
+       data = data.map((item) => ({ 
+          ...item,
+          isAddBasket: basket.some((elem) => elem.id === item.id),
+          isLikeCard: likeCards.some((elem) => elem.id === item.id)
+
+        }))
         cards.value = data
       })
   } catch (err) {
@@ -48,13 +53,14 @@ async function getCards() {
 }
 
 //добавление карточки в закладки
-async function addLikeCard(card) {
-  try {
-    card.isLikeCard = !card.isLikeCard
-    await axios.patch(`https://f774087b0dcc15d2.mokky.dev/cards/${card.id}`, card)
-  } catch (err) {
-    console.log(err)
+function addLikeCard(card) {
+  card.isLikeCard = !card.isLikeCard
+  if (card.isLikeCard) {
+    likeCards.value.push(card)
+  } else {
+    likeCards.value = likeCards.value.filter((i) => i.id !== card.id)
   }
+  localStorage.setItem('likeCards', JSON.stringify(likeCards.value))
 }
 
 //добавление карточки в корзину
@@ -71,18 +77,22 @@ function addCardBasket(card) {
 //отправка купленных товапов на сервер
 async function buySnickers() {
   try {
+    isDisabledBuyBtn.value = true
     // eslint-disable-next-line no-unused-vars
-    const body = bascketCards.value.map(({ isAddBasket, isLikeCard, photo, ...rest }) => {
+    const body = basketCards.value.map(({ isAddBasket, isLikeCard, photo, ...rest }) => {
       return rest
     })
     await axios
       .post('https://f774087b0dcc15d2.mokky.dev/buy', {
+        userID: 'user_1',
         body
       })
       .then(() => {
-        bascketCards.value.forEach((i) => {
+        basketCards.value.forEach((i) => {
           addCardBasket(i)
         })
+      isDisabledBuyBtn.value = false
+
       })
   } catch (err) {
     console.log(err)
@@ -118,17 +128,16 @@ watch(filters, () => {
 provide('buySnickers', buySnickers)
 provide('openBasket', openBasket)
 provide('addCardBasket', addCardBasket)
+provide('isDisabledBuyBtn', isDisabledBuyBtn)
+
 </script>
 
 <template>
-  <div
-    v-if="isShowBasket"
-    class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"
-  ></div>
-  <DrawerVue v-if="isShowBasket" :bascketCards="bascketCards" />
+  <div v-if="isShowBasket" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
+  <DrawerVue v-if="isShowBasket" :basketCards="basketCards" />
 
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
-    <HeaderVue @openBasket="openBasket" :bascketCards="bascketCards" />
+    <HeaderVue @openBasket="openBasket" :basketCards="basketCards" />
 
     <div class="px-12">
       <div class="flex items-center justify-between mt-8 mb-8">

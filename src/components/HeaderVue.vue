@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  bascketCards: Array
+  basketCards: Array
 })
 </script>
 
@@ -19,7 +19,7 @@ const props = defineProps({
       <ul class="flex gap-10 text-gray-500">
         <li @click="$emit('openBasket', true)" class="flex gap-2 hover:text-black cursor-pointer font-medium">
           <img src="/icons/basket.svg" alt="" />
-          <p>{{  props.bascketCards.reduce((accum, b) => accum + b.price, 0).toLocaleString() }} руб.</p>
+          <p>{{  props.basketCards.reduce((accum, b) => accum + b.price, 0).toLocaleString() }} руб.</p>
         </li>
         <li class="flex gap-2 hover:text-black cursor-pointer font-medium">
           <img src="/icons/heart.svg" alt="" />
