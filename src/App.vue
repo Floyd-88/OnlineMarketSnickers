@@ -16,6 +16,12 @@ const filters = reactive({
 })
 const isDisabledBuyBtn = ref(false) //флаг активной кнопки покупки товаров
 
+const statusBasket = reactive({  //статус по корзине
+  statusImg: "/basket.svg",
+  statusTitle: "Корзина пустая",
+  statusDesc: "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+})
+
 const basketCards = computed(() => cards.value.filter((i) => i.isAddBasket))
 
 //получение карточек с товаром
@@ -87,7 +93,11 @@ async function buySnickers() {
         userID: 'user_1',
         body
       })
-      .then(() => {
+      .then((resp) => {
+        statusBasket.statusImg = "/order.png"
+        statusBasket.statusTitle = "Заказ оформлен!"
+        statusBasket.statusDesc = `Ваш заказ #${resp.data.id} скоро будет передан курьерской доставке`
+
         basketCards.value.forEach((i) => {
           addCardBasket(i)
         })
@@ -106,6 +116,13 @@ function openBasket(bool) {
   bool
     ? (document.documentElement.style.overflow = 'hidden')
     : (document.documentElement.style.overflow = 'auto')
+
+    if(statusBasket.statusTitle === "Заказ оформлен!") {
+      statusBasket.statusImg = "/basket.svg"
+    statusBasket.statusTitle = "Корзина пустая"
+    statusBasket.statusDesc = "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+    }
+
 }
 
 //добавить карточку товра в закладку
@@ -134,7 +151,7 @@ provide('isDisabledBuyBtn', isDisabledBuyBtn)
 
 <template>
   <div v-if="isShowBasket" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
-  <DrawerVue v-if="isShowBasket" :basketCards="basketCards" />
+  <DrawerVue v-if="isShowBasket" :basketCards="basketCards" :statusBasket="statusBasket" />
 
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
     <HeaderVue @openBasket="openBasket" :basketCards="basketCards" />

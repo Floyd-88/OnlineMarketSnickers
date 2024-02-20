@@ -6,6 +6,7 @@ import StatusBasket from './StatusBasket.vue';
 
 defineProps({
     basketCards: Array,
+    statusBasket: Object
 })
 
 </script>
@@ -15,7 +16,7 @@ defineProps({
         <DrawerHeader/>
 
         <template v-if="basketCards.length === 0">
-            <StatusBasket  :statusImg="'/basket.svg'" :statusTitle="'Корзина пустая'" :statusDesc="'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'"/>
+            <StatusBasket  :statusImg="statusBasket.statusImg" :statusTitle="statusBasket.statusTitle" :statusDesc="statusBasket.statusDesc"/>
         </template>
         <template v-else>
             <DrawerCardsList :basketCards="basketCards"/>
