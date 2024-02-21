@@ -5,7 +5,7 @@ import DrawerFooter from './DrawerFooter.vue'
 import StatusBasket from './StatusBasket.vue';
 
 defineProps({
-    basketCards: Array,
+    basketCardsUser: Array,
     statusBasket: Object
 })
 
@@ -15,12 +15,12 @@ defineProps({
     <div class="flex flex-col w-96 bg-white h-full fixed top-0 right-0 z-20 p-6">
         <DrawerHeader/>
 
-        <template v-if="basketCards.length === 0">
+        <template v-if="basketCardsUser.length === 0">
             <StatusBasket  :statusImg="statusBasket.statusImg" :statusTitle="statusBasket.statusTitle" :statusDesc="statusBasket.statusDesc"/>
         </template>
         <template v-else>
-            <DrawerCardsList :basketCards="basketCards"/>
-            <DrawerFooter :basketCards="basketCards"/>
+            <DrawerCardsList :basketCardsUser="basketCardsUser"/>
+            <DrawerFooter :basketCardsUser="basketCardsUser"/>
         </template>
 
     </div>

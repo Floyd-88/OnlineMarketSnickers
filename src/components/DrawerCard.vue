@@ -1,15 +1,11 @@
 <script setup>
-import { inject } from 'vue';
+import { useCounterStore } from '@/stores/root'
+
+const rootStore = useCounterStore()
 
 defineProps({
     basketCard: Object
 })
-
-
-
-const addCardBasket = inject('addCardBasket')
-
-
 </script>
 
 <template>
@@ -22,7 +18,7 @@ const addCardBasket = inject('addCardBasket')
 
             </div>
             <div class="flex items-end mt-2">
-                <img @click="addCardBasket(basketCard)" class=" w-7 h-7 cursor-pointer hover:scale-125 transition" src="/icons/remove.svg" alt="">
+                <img @click="rootStore.addCardBasket(basketCard)" class=" w-7 h-7 cursor-pointer hover:scale-125 transition" src="/icons/remove.svg" alt="">
             </div>
         </div>
     </div>
