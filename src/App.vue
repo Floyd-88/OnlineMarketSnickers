@@ -1,6 +1,8 @@
 <script setup>
 import HeaderVue from './components/HeaderVue.vue'
 import DrawerVue from './components/DrawerVue.vue'
+import SwiperSlider from './components/SwiperSlider.vue';
+
 import { provide } from 'vue'
 import { onMounted } from 'vue'
 
@@ -40,6 +42,9 @@ provide('openBasket', openBasket)
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
     <HeaderVue @openBasket="openBasket" :basketCardsUser="basketCardsUser" />
     
+    <SwiperSlider/>
+
+
     <div class="px-12">
       <router-view></router-view>
     </div>
