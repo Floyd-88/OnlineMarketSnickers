@@ -19,6 +19,25 @@ export const useCounterStore = defineStore('root', {
       statusDesc: 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
     },
 
+    //отсутствие заказов
+    statusPage: {
+    statusOrders: {
+      smile: '/not_orders.png',
+      title: 'У вас нет заказов',
+      text: 'Оформите хотя бы один заказ.'
+    },
+    statusFavorites: {
+      smile: '/not_favorites.png',
+      title: 'Закладок нет :(',
+      text: 'Вы ничего не добавляли в закладки'
+    },
+    statusSnickers: {
+      smile: '/not_favorites.png',
+      title: 'Товары отстуствуют',
+      text: 'В данный момент в наличии нет доступных товаров'
+    },
+    },
+
     isShowBasket: false, //показывать корзину
     isDisabledBuyBtn: false //флаг активной кнопки покупки товаров
   }),

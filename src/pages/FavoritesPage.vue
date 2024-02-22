@@ -4,9 +4,10 @@ import FiltersSearch from '@/components/FiltersSearch.vue'
 
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
+import NotOrders from '@/components/NotOrders.vue';
 
 const rootStore = useCounterStore()
-const { likeCardsUser } = storeToRefs(rootStore)
+const { likeCardsUser, statusPage } = storeToRefs(rootStore)
 </script>
 
 <template>
@@ -16,8 +17,11 @@ const { likeCardsUser } = storeToRefs(rootStore)
   </div>
 
   <CardList
+  v-if="likeCardsUser.length > 0"
     :cards="likeCardsUser"
     @onClickLikeCard="rootStore.addLikeCard"
     @onClickAddBasket="rootStore.addCardBasket"
   />
+
+  <NotOrders v-else :statusPage="statusPage.statusFavorites"/>
 </template>

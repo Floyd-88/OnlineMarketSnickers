@@ -1,0 +1,29 @@
+<script setup></script>
+
+<template>
+    <button class="flex items-center gap-5 border rounded-2xl bg-lime-500 text-white font-semibold text-lg py-4 px-7  hover:bg-lime-600 transition ">
+      <svg
+        width="16"
+        height="14"
+        viewBox="0 0 16 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M14.7144 7L1.00007 7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M7 13L1 7L7 1"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Вернуться назад
+    </button>
+</template>

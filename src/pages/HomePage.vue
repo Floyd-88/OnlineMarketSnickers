@@ -1,12 +1,14 @@
 <script setup>
 import CardList from '../components/CardsList.vue'
 import FiltersSearch from '@/components/FiltersSearch.vue'
+import NotOrders from '@/components/NotOrders.vue';
+
 
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
 
 const rootStore = useCounterStore()
-const { cards } = storeToRefs(rootStore)
+const { cards, statusPage } = storeToRefs(rootStore)
 </script>
 
 <template>
@@ -16,8 +18,11 @@ const { cards } = storeToRefs(rootStore)
   </div>
 
   <CardList
+    v-if="cards.length > 0"
     :cards="cards"
     @onClickLikeCard="rootStore.addLikeCard"
     @onClickAddBasket="rootStore.addCardBasket"
   />
+
+  <NotOrders v-else :statusPage="statusPage.statusSnickers"/>
 </template>
