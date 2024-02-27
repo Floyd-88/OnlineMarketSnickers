@@ -1,11 +1,17 @@
 <script setup>
+import { storeToRefs } from 'pinia'
+import { useCounterStore } from '@/stores/root'
+
+const rootStore = useCounterStore()
+const { user } = storeToRefs(rootStore)
+
 const props = defineProps({
   basketCardsUser: Array
 })
 </script>
 
 <template>
-  <header class="flex justify-between items-center pt-10 px-12 pb-8 border-b-2 border-gray-300">
+  <header class="flex justify-between items-center pt-10 px-12 pb-8 border-b-2 border-gray-300 relative">
     <div class="flex items-center gap-4">
       <div>
         <router-link to="/"><img src="/logo.png" alt="" /></router-link>
@@ -29,11 +35,24 @@ const props = defineProps({
         </li>
         </router-link>
 
-        <li class="flex gap-2 hover:text-black cursor-pointer font-medium">
-          <img src="/icons/prof.svg" alt="" />
-          <p>Профиль</p>
-        </li>
+        <router-link to="/profile">
+          <li class="flex gap-2 hover:text-black cursor-pointer font-medium">
+            <template v-if="user?.name">
+              <img src="/icons/prof.svg" alt="" />
+              <p >Профиль</p>
+            </template>
+            <template v-else>
+              <img src="/icons/come.svg" alt="" />
+              <p >Войти</p>
+            </template>
+          </li>
+        </router-link>
       </ul>
     </div>
+
+    <div v-if="user?.name" class="absolute right-0 top-0 flex pt-6 pr-12">
+        <p class="pr-4">Здраствуйте, <span class="font-bold">{{ user?.login }}</span></p>
+        <a @click="rootStore.exitUser" class="font-bold text-gray-400 hover:text-gray-600" href="">Выход</a>
+      </div>
   </header>
 </template>

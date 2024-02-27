@@ -5,9 +5,6 @@ import ButtonVue from './buttons/ButtonVue.vue';
 const router = useRouter()
 const route = useRoute()
 
-console.log(router)
-console.log(route.name)
-
 defineProps({
     statusPage: Object
 })

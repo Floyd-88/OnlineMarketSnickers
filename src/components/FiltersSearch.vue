@@ -7,10 +7,8 @@ import debounce from 'lodash.debounce'
 const rootStore = useCounterStore()
 const { filters } = storeToRefs(rootStore)
 
-
-watch( () => filters.value.searchName, debounce(rootStore.getCards, 300))   
-watch( () => filters.value.optionsCard, rootStore.getCards)   
-
+watch( () => filters.value.searchName, debounce(rootStore.getCards, 300))
+watch( () => filters.value.optionsCard, rootStore.getCards)  
 </script>
 
 <template>
