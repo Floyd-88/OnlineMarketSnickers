@@ -1,12 +1,14 @@
 <script setup>
+import {useRoute} from 'vue-router'
 defineProps({
 card: Object
 })
 
+const route = useRoute()
 </script>
 <template>
        <div class="flex flex-col border rounded-3xl p-8 relative cursor-pointer transition hover:shadow-xl hover:-translate-y-4">
-            <img class=" w-8 absolute top-8 left-8 hover:scale-125" @click="$emit('onClickLikeCard')" :src="!card.isLikeCard ? '/icons/like_1.svg' : '/icons/like_2.svg'" alt="like">
+            <img v-if="route.name !== 'profile'" class=" w-8 absolute top-8 left-8 hover:scale-125" @click="$emit('onClickLikeCard')" :src="!card.isLikeCard ? '/icons/like_1.svg' : '/icons/like_2.svg'" alt="like">
             <div class="flex justify-center">
                 <img class="flex w-32" :src="card.photo" alt="snickers">
             </div>

@@ -51,7 +51,7 @@ const props = defineProps({
     </div>
 
     <div v-if="user?.name" class="absolute right-0 top-0 flex pt-6 pr-12">
-        <p class="pr-4">Здраствуйте, <span class="font-bold">{{ user?.login }}</span></p>
+        <p class="pr-4">Здраствуйте, <span class="font-bold">{{ user?.login.substr(0, 1).toUpperCase() + user?.login.substr(1) }}</span></p>
         <a @click="rootStore.exitUser" class="font-bold text-gray-400 hover:text-gray-600" href="">Выход</a>
       </div>
   </header>

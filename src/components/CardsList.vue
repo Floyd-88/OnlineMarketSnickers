@@ -1,10 +1,11 @@
 <script setup>
+// import { computed } from 'vue';
 import CardVue from './CardVue.vue';
 
 const emit = defineEmits(['onClickLikeCard', 'onClickAddBasket'])
 
 defineProps({
-  cards: Array
+  cards: Object
 })
 
 function onClickLikeCard(card) {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
-import { CARDS_URL, BUY_URL, USERS_URL, REGISTER_URL, AUTH_URL } from '../constants/api.js'
+import { CARDS_URL, BUY_URL, REGISTER_URL, AUTH_URL } from '../constants/api.js'
 
 export const useCounterStore = defineStore('root', {
   state: () => ({
@@ -10,6 +10,7 @@ export const useCounterStore = defineStore('root', {
     showAuto: false, //показать окно авторизации
     showReg: false, //показать окно регистрации
     successReg: false, //показывать окно об успешной регистрации
+    errorAuth: "", //ошибка при авторизации
 
     //фильтр и сортировка карточек товара
     filters: {
@@ -106,7 +107,11 @@ export const useCounterStore = defineStore('root', {
         })
 
         await axios
-          .post(BUY_URL, {...orders, userID:`user_${this.user.id}`}, {
+          .post(BUY_URL, {
+            ...orders, 
+            userID:`user_${this.user.id}`,
+            date: new Date()
+          }, {
             headers: { 
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -132,6 +137,7 @@ export const useCounterStore = defineStore('root', {
     async getOrderCards() {
       try {
         let params = {
+          sortBy: "-date",
           userID: `user_${this.user.id}`
         }
 
@@ -154,7 +160,7 @@ export const useCounterStore = defineStore('root', {
     //регистрация нового пользователя
     async registerUser(data) {
       try {
-        if (!data.name || !data.name || !data.email || !data.pass) {
+        if (!data.name || !data.name || !data.email || !data.password) {
           console.log('Данные не заполнены')
           return
         } else {
@@ -162,7 +168,7 @@ export const useCounterStore = defineStore('root', {
             name: data.name,
             login: data.login,
             email: data.email,
-            password: data.pass})
+            password: data.password})
 
             await axios
             .post(REGISTER_URL, body, {
@@ -177,19 +183,22 @@ export const useCounterStore = defineStore('root', {
           }
       } catch (err) {
         console.log(err)
+        if(err.response?.data?.message === 'RESOURCE_USER_ALREADY_EXISTS') {
+          this.errorAuth = "Пользователь с такой почтой уже зарегистрирован"
+        }
       }
     },
 
     //авторизация пользователя
     async authorizationUser(data) {
       try {
-        if (!data.email || !data.pass) {
+        if (!data.email || !data.password) {
           console.log('Необходимо заполнить поля')
           return
         }
         let body = JSON.stringify({
           email: data.email,
-          password: data.pass
+          password: data.password
         })
 
         await axios
@@ -199,19 +208,23 @@ export const useCounterStore = defineStore('root', {
               "Content-Type": "application/json"
             }
           })
-          .then(({data }) => {
+          .then(({data}) => {
             if (data.token) {
               localStorage.setItem('token', JSON.stringify(data.token))
 
               this.user = data.data
               localStorage.setItem('user', JSON.stringify(this.user))
               this.showAuto = false
+              console.log(data)
             } else {
               console.log('Пользователь не найден')
             }
           })
       } catch (err) {
-        console.log(err)
+        if(err.response?.data?.message === 'RESOURCE_INVALID_LOGIN_OR_PASSWORD') {
+          this.errorAuth = "Пользователя с таким логином или паролем не найдено"
+        }
+        
       }
     },
 

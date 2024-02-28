@@ -19,8 +19,9 @@ onMounted(()=> rootStore.getOrderCards())
     <div class="border-b mb-8" v-for="(cards, index) in buyCards"
     :key="index"
     >
+    <p v-if="cards.date" class="text-end text-sm mb-4 text-gray-400">{{ new Date(cards.date).toLocaleString() }}</p>
     <CardList
-    :cards="cards"
+    :cards="Object.fromEntries(Object.entries({...cards}).filter(d =>d[0] !== 'date'))"
     @onClickLikeCard="rootStore.addLikeCard"
     @onClickAddBasket="rootStore.addCardBasket"
   />

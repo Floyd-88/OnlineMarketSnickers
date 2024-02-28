@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
 
 const rootStore = useCounterStore()
-const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg } = storeToRefs(rootStore)
+const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth } = storeToRefs(rootStore)
 
 //открыть корзину
 function openBasket(bool) {
@@ -38,7 +38,7 @@ provide('openBasket', openBasket)
 </script>
 
 <template>
-  <div @click="showAuto=false, successReg=false, showReg=false" v-if="isShowBasket || showAuto || showReg" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
+  <div @click="showAuto=false, successReg=false, showReg=false, errorAuth=''" v-if="isShowBasket || showAuto || showReg" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
   <DrawerVue v-if="isShowBasket" :basketCardsUser="basketCardsUser" :statusBasket="statusBasket" />
   <template v-if="!user?.name">
     <template v-if="showAuto">
