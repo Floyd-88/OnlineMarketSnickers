@@ -11,7 +11,8 @@ export const useCounterStore = defineStore('root', {
     showReg: false, //показать окно регистрации
     successReg: false, //показывать окно об успешной регистрации
     errorAuth: "", //ошибка при авторизации
-
+    paginations: {}, //информация с сервера для страничной пагинации
+    likeCardsUser: [], //карточки добавленные в закладки
     //фильтр и сортировка карточек товара
     filters: {
       searchName: '',
@@ -50,7 +51,7 @@ export const useCounterStore = defineStore('root', {
 
   getters: {
     basketCardsUser: (state) => state.cards.filter((elem) => elem.isAddBasket), //карточки товара в корзине
-    likeCardsUser: (state) => state.cards.filter((elem) => elem.isLikeCard) //какрточки добавленные в закладки
+    // likeCardsUser: (state) => state.cards.filter((elem) => elem.isLikeCard) //какрточки добавленные в закладки
   },
 
   actions: {
@@ -63,17 +64,26 @@ export const useCounterStore = defineStore('root', {
     //добавление карточки в закладки
     addLikeCard(card) {
       card.isLikeCard = !card.isLikeCard
+        this.likeCardsUser = JSON.parse(localStorage.getItem('likeCards'))
+      if(card.isLikeCard) {
+        this.likeCardsUser.push(card)
+      } else {
+        this.likeCardsUser = this.likeCardsUser.filter((i) => i.id !== card.id)
+      }
       localStorage.setItem('likeCards', JSON.stringify(this.likeCardsUser))
     },
 
     //получение всех карточек с товаром
-    async getCards() {
+    async getCards(current_page) {
       try {
         let basket = JSON.parse(localStorage.getItem('basket'))
         let like = JSON.parse(localStorage.getItem('likeCards'))
 
         let params = {
-          sortBy: this.filters.optionsCard
+          sortBy: this.filters.optionsCard,
+          page: current_page || 1,
+          limit: 8
+
         }
         if (this.filters.searchName) {
           params.name = `*${this.filters.searchName}*`
@@ -83,13 +93,14 @@ export const useCounterStore = defineStore('root', {
           .get(CARDS_URL, {
             params
           })
-          .then(({ data }) => {
-            data = data.map((item) => ({
+          .then(({data}) => {
+            data.items = data.items.map((item) => ({
               ...item,
               isAddBasket: basket?.some((elem) => elem.id === item.id),
               isLikeCard: like?.some((elem) => elem.id === item.id)
             }))
-            this.cards = data
+            this.cards = data.items
+            this.paginations = data.meta
           })
       } catch (err) {
         console.log(err)

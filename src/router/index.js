@@ -39,11 +39,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+
+    const rootStore = useCounterStore()
+    const { showAuto } = storeToRefs(rootStore)
+
     if(to.matched.some(record => record.meta.requiresAuth)) {
     let user = JSON.parse(localStorage.getItem('token'))
       if (user === null) {
-        const rootStore = useCounterStore()
-        const { showAuto } = storeToRefs(rootStore)
         showAuto.value = true
         next({
           path: '/',
@@ -52,6 +54,14 @@ router.beforeEach((to, from, next) => {
         next()
       }
     } else if(to.matched.some(record => record.meta.guest)) {
+        // paginations.value.current_page = 1
+        // if(to.name === 'favorite') {
+
+        //     paginations.value.total_pages = Math.ceil(likeCardsUser.value.length / 10)
+        //     console.log(paginations.value.total_pages)
+        if(to.name === 'home') {
+            rootStore.getCards()
+        }
         next()
     }else {
       next() 

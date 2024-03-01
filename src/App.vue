@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
 
 const rootStore = useCounterStore()
-const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth } = storeToRefs(rootStore)
+const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth, likeCardsUser } = storeToRefs(rootStore)
 
 //открыть корзину
 function openBasket(bool) {
@@ -32,6 +32,8 @@ function openBasket(bool) {
 onMounted(() => {
   rootStore.getCards()
   user.value = JSON.parse(localStorage.getItem('user'))
+  likeCardsUser.value = JSON.parse(localStorage.getItem('likeCards'))
+
 })
 
 provide('openBasket', openBasket)

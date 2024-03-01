@@ -18,7 +18,7 @@ const route = useRoute()
                     <span class="text-gray-400">Цена:</span>
                     <span class="font-bold">{{ card.price.toLocaleString() }} руб.</span>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center" v-if="route.name !== 'profile'">
                     <button class="w-7 h-7" @click="$emit('onClickAddBasket')"><img class="hover:scale-125"  :src="!card.isAddBasket ? '/icons/plus_1.svg' : '/icons/plus_2.svg'" alt="plus"></button>
                 </div>
             </div>
