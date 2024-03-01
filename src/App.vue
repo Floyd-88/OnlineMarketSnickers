@@ -32,7 +32,9 @@ function openBasket(bool) {
 onMounted(() => {
   rootStore.getCards()
   user.value = JSON.parse(localStorage.getItem('user'))
-  likeCardsUser.value = JSON.parse(localStorage.getItem('likeCards'))
+  likeCardsUser.value = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
+  basketCardsUser.value = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
+
 
 })
 

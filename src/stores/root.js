@@ -13,6 +13,7 @@ export const useCounterStore = defineStore('root', {
     errorAuth: "", //ошибка при авторизации
     paginations: {}, //информация с сервера для страничной пагинации
     likeCardsUser: [], //карточки добавленные в закладки
+    basketCardsUser: [], //карточки добавленные в корзину
     //фильтр и сортировка карточек товара
     filters: {
       searchName: '',
@@ -50,7 +51,7 @@ export const useCounterStore = defineStore('root', {
   }),
 
   getters: {
-    basketCardsUser: (state) => state.cards.filter((elem) => elem.isAddBasket), //карточки товара в корзине
+    // basketCardsUser: (state) => state.cards.filter((elem) => elem.isAddBasket), //карточки товара в корзине
     // likeCardsUser: (state) => state.cards.filter((elem) => elem.isLikeCard) //какрточки добавленные в закладки
   },
 
@@ -58,13 +59,25 @@ export const useCounterStore = defineStore('root', {
     //добавление карточки в корзину
     addCardBasket(card) {
       card.isAddBasket = !card.isAddBasket
-      localStorage.setItem('basket', JSON.stringify(this.basketCardsUser))
+      this.basketCardsUser = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
+    if(card.isAddBasket) {
+      this.basketCardsUser.push(card)
+    } else {
+      this.basketCardsUser = this.basketCardsUser.filter((i) => i.id !== card.id)
+    }
+    localStorage.setItem('basket', JSON.stringify(this.basketCardsUser))
+
+    if(card.isLikeCard) {
+      this.likeCardsUser.map((el) => card.id === el.id ? el.isAddBasket = card.isAddBasket : card)
+      localStorage.setItem('likeCards', JSON.stringify(this.likeCardsUser))
+    }
+
     },
 
     //добавление карточки в закладки
     addLikeCard(card) {
       card.isLikeCard = !card.isLikeCard
-        this.likeCardsUser = JSON.parse(localStorage.getItem('likeCards'))
+        this.likeCardsUser = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
       if(card.isLikeCard) {
         this.likeCardsUser.push(card)
       } else {
@@ -76,8 +89,8 @@ export const useCounterStore = defineStore('root', {
     //получение всех карточек с товаром
     async getCards(current_page) {
       try {
-        let basket = JSON.parse(localStorage.getItem('basket'))
-        let like = JSON.parse(localStorage.getItem('likeCards'))
+        let basket = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
+        let like = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
 
         let params = {
           sortBy: this.filters.optionsCard,
