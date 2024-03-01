@@ -50,10 +50,7 @@ export const useCounterStore = defineStore('root', {
     isDisabledBuyBtn: false //флаг активной кнопки покупки товаров
   }),
 
-  getters: {
-    // basketCardsUser: (state) => state.cards.filter((elem) => elem.isAddBasket), //карточки товара в корзине
-    // likeCardsUser: (state) => state.cards.filter((elem) => elem.isLikeCard) //какрточки добавленные в закладки
-  },
+  getters: {},
 
   actions: {
     //добавление карточки в корзину

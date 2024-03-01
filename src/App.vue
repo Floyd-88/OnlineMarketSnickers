@@ -10,6 +10,9 @@ import { onMounted } from 'vue'
 
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const rootStore = useCounterStore()
 const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth, likeCardsUser } = storeToRefs(rootStore)
@@ -56,7 +59,7 @@ provide('openBasket', openBasket)
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
     <HeaderVue @openBasket="openBasket" :basketCardsUser="basketCardsUser" />
 
-    <SwiperSlider />
+    <SwiperSlider v-if="route.name !== 'snickers'"/>
 
     <div class="px-12">
       <router-view></router-view>
