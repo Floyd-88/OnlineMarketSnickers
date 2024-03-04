@@ -1,53 +1,56 @@
 <script setup>
-import { ref } from 'vue'
-// import SwiperSlider from '@/components/SwiperSlider.vue'
+// import { ref, watch } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 const modules = [Navigation]
 
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { useRoute, useRouter } from 'vue-router';
 
-const images = ref([
-  {
-    id: 1,
-    imageUrl: '/snickers/1/1.jpeg'
-  },
-  {
-    id: 2,
-    imageUrl: '/snickers/1/2.jpeg'
-  },
-  {
-    id: 3,
-    imageUrl: '/snickers/1/3.jpeg'
-  },
-  {
-    id: 4,
-    imageUrl: '/snickers/1/4.jpeg'
-  }
-])
+import { storeToRefs } from 'pinia'
+import { useCounterStore } from '@/stores/root'
+
+const rootStore = useCounterStore()
+const { snickers } = storeToRefs(rootStore)
+
+const route = useRoute()
+const router = useRouter()
+
+
+// const slider_photo = ref(snickers.slider_photo)
+
+rootStore.getSnickers(route.query.id)
+// watch(
+//   () => route.params,
+//   // eslint-disable-next-line no-unused-vars
+//   (to, from) => {
+//     rootStore.getSnickers(route.query.id)
+//     window.scrollTo(0, 0)
+//   }
+// )
 </script>
 
 <template>
   <div class="dark:text-gray-400 mt-8">
     <div class="mb-1 flex justify-between">
       <div class="pr-2">
-        <h3 class="text-base font-bold">Puma</h3>
-        <h3 class="text-base md:text-2xl font-bold">Кроссовки Puma X Aka Boku Future Rider</h3>
+        <h3 class="text-base font-bold">{{ snickers?.brand || "" }}</h3>
+        <h3 class="text-base md:text-2xl font-bold">{{ snickers?.name || "" }}</h3>
       </div>
       <button
         class="px-2 py-1 h-max border-2 text-white font-semibold border-lime-500 bg-lime-500 hover:bg-lime-600 shadow-md"
+        @click="router.go(-1)"
       >
-        вернуться назад
+        Вернуться назад
       </button>
     </div>
-    <!-- <div>{{ anime.aired?.from?.toLocaleString().slice(0, 4) }} | {{ anime.rating }}</div> -->
     <div>
       <ul class="flex my-2">
         <li
           class="px-2 py-1 border border-indigo-500 bg-indigo-500 font-bold text-2xl text-white"
         >
-          10 449 руб.
+          {{ snickers?.price || ""}} руб.
         </li>
       </ul>
     </div>
@@ -57,12 +60,13 @@ const images = ref([
         <div class="basis-3/6 h-full border pb-2 mr-4 sm:pb-0">
           <img
             class="flex items-center justify-center w-auto h-full"
-            src="/snickers/snickers_1.jpg"
+            :src="snickers?.photo"
           />
         </div>
 
         <div class="flex flex-col justify-between basis-3/6 overflow-hidden h-full">
           <swiper
+          v-if="snickers?.slider_photo"
             class=""
             style="width: 100%; display: flex; flex: 0 1 auto"
             :modules="modules"
@@ -74,10 +78,10 @@ const images = ref([
             <swiper-slide
               class=""
               style="display: flex; justify-content: center"
-              v-for="image in images"
-              :key="image.id"
+              v-for="(image, index) in snickers?.slider_photo"
+              :key="index"
             >
-              <img class="rounded-3xl" :src="image.imageUrl" />
+              <img class="rounded-3xl" :src="image" />
             </swiper-slide>
             <div
               class="prevArrow hover:bg-indigo-500 transition bg-indigo-400 shadow-md rounded-full cursor-pointer absolute top-1/2 transform -translate-y-1/2 left-0 z-10"
@@ -118,41 +122,37 @@ const images = ref([
             <h2 class="text-2xl font-bold mb-2">Характеристики</h2>
             <ul>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
-                Пол: <span class="font-light">мужской</span>
+                Пол: <span class="font-light">{{ snickers?.gender || "" }}</span>
               </li>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
-                Сезон: <span class="font-light">лето</span>
+                Сезон: <span class="font-light">{{snickers?.season || ""}}</span>
               </li>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
                 Срок гарантии:
-                <span class="font-light">12 месяцев</span>
+                <span class="font-light">{{ snickers?.guarantee || "" }} месяцев</span>
               </li>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
                 Материал верха:
-                <span class="font-light">63% полиэстер, 37% синтетическая кожа</span>
+                <span class="font-light">{{snickers?.upper_material || ""}}</span>
               </li>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
                 Материал подкладки:
-                <span class="font-light">100% полиэстер</span>
+                <span class="font-light">{{ snickers?.lining_material || "" }}</span>
               </li>
               <li class="mb-2 py-1 text-base border-t border-indigo-500 font-medium">
                 Материал подошвы:
-                <span class="font-light">термопластичная резина</span>
+                <span class="font-light">{{ snickers?.outsole_material || "" }}</span>
               </li>
               <li class="mb-2 py-1 text-sm border-t border-indigo-500 font-medium">
                 Страна производства:
-                <span class="font-light">Китай</span>
+                <span class="font-light">{{ snickers?.maden || ""}}</span>
               </li>
             </ul>
           </div>
           <div class="basis-3/4">
             <h2 class="text-2xl font-bold mb-2">Описание товара</h2>
             <div>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae autem, temporibus
-              saepe iste nostrum minus numquam cum sit. Dolor, nulla ipsam alias exercitationem
-              deserunt odio tempora dicta deleniti impedit reiciendis ab debitis maiores ratione,
-              dolorum at ad aliquam saepe reprehenderit! Modi voluptate voluptas dolores cupiditate
-              eius esse quis tempore facere.
+              {{ snickers?.desc || "" }}
             </div>
           </div>
         </div>

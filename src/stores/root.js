@@ -5,6 +5,7 @@ import { CARDS_URL, BUY_URL, REGISTER_URL, AUTH_URL } from '../constants/api.js'
 export const useCounterStore = defineStore('root', {
   state: () => ({
     cards: [], //карточки товара
+    snickers: {}, //информация по кроссовкам
     buyCards: [], //купленные товары
     user: {}, //пользователь
     showAuto: false, //показать окно авторизации
@@ -174,6 +175,25 @@ export const useCounterStore = defineStore('root', {
             this.buyCards = array
           })
       } catch (err) {
+        console.log(err)
+      }
+    },
+
+    //получить информацию по кроссовкам
+    async getSnickers(id) {
+      try {
+        let params = {
+          id
+        }
+        await axios
+          .get(CARDS_URL, {
+            params
+          })
+          .then(({ data }) => {
+            data[0].slider_photo = data[0].slider_photo.split(', ')
+            this.snickers = data[0]
+          })
+      } catch(err) {
         console.log(err)
       }
     },
