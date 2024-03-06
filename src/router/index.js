@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import FavoritesPage from '../pages/FavoritesPage.vue'
 import MyProfilePage from '../pages/MyProfilePage.vue'
-import SnickersPage from '../pages/SnickersPage.vue'
+import SneakersPage from '../pages/SneakersPage.vue'
 
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
@@ -37,9 +37,9 @@ const router = createRouter({
               }
         },
         {
-          path: '/snickers',
-          name: 'snickers',
-          component: SnickersPage,
+          path: '/sneakers',
+          name: 'sneakers',
+          component: SneakersPage,
           meta: { 
               guest: true
             }

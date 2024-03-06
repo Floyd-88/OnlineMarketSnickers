@@ -7,9 +7,7 @@ defineProps({
 const route = useRoute()
 </script>
 <template>
-  <div
-    class="flex flex-col border rounded-3xl p-8 relative transition hover:shadow-xl hover:-translate-y-4"
-  >
+  <div class="flex flex-col border rounded-3xl p-8 relative transition hover:shadow-xl hover:-translate-y-4">
     <img
       v-if="route.name !== 'profile'"
       class="w-8 absolute top-8 left-8 hover:scale-125 cursor-pointer"
@@ -17,12 +15,12 @@ const route = useRoute()
       :src="!card.isLikeCard ? '/icons/like_1.svg' : '/icons/like_2.svg'"
       alt="like"
     />
-    <router-link :to="{ path: '/snickers', query: { id: card.id }}">
-      <div class="flex justify-center">
-        <img class="flex w-32 cursor-pointer" :src="card.photo" alt="snickers" />
+    <router-link :to="{ path: '/sneakers', query: { id: card.id || card.cardID}}">
+      <div class="flex  justify-center w-32">
+        <img class="flex  w-full cursor-pointer" :src="card.photo" alt="sneakers" />
       </div>
     </router-link>
-    <router-link :to="{ path: '/snickers', query: { id: card.id }}"
+    <router-link :to="{ path: '/sneakers', query: { id: card.id || card.cardID }}"
       ><p class="mt-4 flex justify-center cursor-pointer hover:text-gray-500">{{ card.name }}</p>
     </router-link>
     <div class="flex justify-between mt-4">

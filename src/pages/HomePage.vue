@@ -1,28 +1,55 @@
 <script setup>
-import {watch} from 'vue'
+import { watch, ref } from 'vue'
 
 import CardList from '../components/CardsList.vue'
 import FiltersSearch from '@/components/FiltersSearch.vue'
-import NotOrders from '@/components/NotOrders.vue';
-import PaginationsVue from '@/components/PaginationsVue.vue';
+import NotOrders from '@/components/NotOrders.vue'
+import PaginationsVue from '@/components/PaginationsVue.vue'
 
 import debounce from 'lodash.debounce'
-
 
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '@/stores/root'
 
 const rootStore = useCounterStore()
-const { cards, statusPage, paginations, filters } = storeToRefs(rootStore)
+const { cards, statusPage, paginations, filters, isLoaded } = storeToRefs(rootStore)
 
-watch( () => filters.value.searchName, debounce(rootStore.getCards, 300))
-watch( () => filters.value.optionsCard, rootStore.getCards) 
+const loadArray = ref('')
+
+watch(() => filters.value.searchName, debounce(rootStore.getCards, 300))
+watch(() => filters.value.optionsCard, rootStore.getCards)
+
+function loaded(n) {
+  let arr = ['.', '..', '...']
+  loadArray.value = arr[n]
+}
+
+let timerID = ''
+function startInterval() {
+  let n = 0
+  timerID = setInterval(() => {
+    if (n > 2) n = 0
+    loaded(n)
+    n++
+    console.log(n)
+  }, 300)
+}
+startInterval()
+
+watch(isLoaded, () => {
+  if (!isLoaded.value) {
+    clearInterval(timerID)
+  } else {
+    startInterval()
+  }
+})
+
 </script>
 
 <template>
   <div class="flex items-center justify-between mt-8 mb-8">
     <h2 class="text-3xl font-bold">Все кроссовки</h2>
-    <FiltersSearch/>
+    <FiltersSearch />
   </div>
 
   <CardList
@@ -31,7 +58,11 @@ watch( () => filters.value.optionsCard, rootStore.getCards)
     @onClickLikeCard="rootStore.addLikeCard"
     @onClickAddBasket="rootStore.addCardBasket"
   />
-  <NotOrders v-else :statusPage="statusPage.statusSnickers"/>
-
-  <PaginationsVue :clickNumPage="rootStore.getCards" :total_pages="paginations?.total_pages" :current_page="paginations?.current_page"/>
+  <div v-if="isLoaded" class="flex justify-center p-8 font-semibold text-lg">Загрузка{{ loadArray }}</div>
+  <NotOrders v-if="cards.length === 0 && !isLoaded" :statusPage="statusPage.statusSneakers" />
+  <PaginationsVue
+    :clickNumPage="rootStore.getCards"
+    :total_pages="paginations?.total_pages"
+    :current_page="paginations?.current_page"
+  />
 </template>

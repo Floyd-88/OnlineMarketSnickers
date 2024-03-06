@@ -5,7 +5,9 @@ import { CARDS_URL, BUY_URL, REGISTER_URL, AUTH_URL } from '../constants/api.js'
 export const useCounterStore = defineStore('root', {
   state: () => ({
     cards: [], //карточки товара
-    snickers: {}, //информация по кроссовкам
+    sneakers: {}, //информация по кроссовкам
+    // sneakersID: {}, //query параметр id страницы с информацией по кроссовкам
+
     buyCards: [], //купленные товары
     user: {}, //пользователь
     showAuto: false, //показать окно авторизации
@@ -40,7 +42,7 @@ export const useCounterStore = defineStore('root', {
         title: 'Закладок нет :(',
         text: 'Вы ничего не добавляли в закладки'
       },
-      statusSnickers: {
+      statusSneakers: {
         smile: '/not_favorites.png',
         title: 'Товары отстуствуют',
         text: 'В данный момент в наличии нет доступных товаров'
@@ -48,7 +50,9 @@ export const useCounterStore = defineStore('root', {
     },
 
     isShowBasket: false, //показывать корзину
-    isDisabledBuyBtn: false //флаг активной кнопки покупки товаров
+    isDisabledBuyBtn: false, //флаг активной кнопки покупки товаров
+    isShowPhoto: false, //показывать картинку в фул размере
+    isLoaded: false //показывать загрузчик во время запросов на сервер
   }),
 
   getters: {},
@@ -87,6 +91,9 @@ export const useCounterStore = defineStore('root', {
     //получение всех карточек с товаром
     async getCards(current_page) {
       try {
+
+        this.isLoaded = true
+
         let basket = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
         let like = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
 
@@ -105,6 +112,7 @@ export const useCounterStore = defineStore('root', {
             params
           })
           .then(({data}) => {
+            this.isLoaded = false
             data.items = data.items.map((item) => ({
               ...item,
               isAddBasket: basket?.some((elem) => elem.id === item.id),
@@ -112,14 +120,14 @@ export const useCounterStore = defineStore('root', {
             }))
             this.cards = data.items
             this.paginations = data.meta
-          })
+          }) .finally(() => this.isLoaded = false)
       } catch (err) {
         console.log(err)
       }
     },
 
     //совершение покупки товаров
-    async buySnickers() {
+    async buySneakers() {
       try {
         this.isDisabledBuyBtn = true
         // eslint-disable-next-line no-unused-vars
@@ -180,19 +188,24 @@ export const useCounterStore = defineStore('root', {
     },
 
     //получить информацию по кроссовкам
-    async getSnickers(id) {
+    async getSneakers(id) {
+      let basket = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
+      let like = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
       try {
         let params = {
           id
         }
-        await axios
-          .get(CARDS_URL, {
+          await axios.get(CARDS_URL, {
             params
-          })
-          .then(({ data }) => {
-            data[0].slider_photo = data[0].slider_photo.split(', ')
-            this.snickers = data[0]
-          })
+          }).then(({data}) => {
+          if(data.length > 0) {
+          data[0].slider_photo = data[0].slider_photo.split(', ')
+          data[0].isAddBasket = basket?.some((elem) => elem.id === data[0].id),
+          data[0].isLikeCard = like?.some((elem) => elem.id === data[0].id)
+          
+          this.sneakers = data[0]
+            }
+          }) 
       } catch(err) {
         console.log(err)
       }

@@ -15,7 +15,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const rootStore = useCounterStore()
-const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth, likeCardsUser } = storeToRefs(rootStore)
+const { statusBasket, isShowBasket, basketCardsUser, user, showAuto, showReg, successReg, errorAuth, likeCardsUser, isShowPhoto } = storeToRefs(rootStore)
 
 //открыть корзину
 function openBasket(bool) {
@@ -37,15 +37,13 @@ onMounted(() => {
   user.value = JSON.parse(localStorage.getItem('user'))
   likeCardsUser.value = localStorage.getItem('likeCards') ? JSON.parse(localStorage.getItem('likeCards')) : []
   basketCardsUser.value = localStorage.getItem('basket') ? JSON.parse(localStorage.getItem('basket')) : []
-
-
 })
 
 provide('openBasket', openBasket)
 </script>
 
 <template>
-  <div @click="showAuto=false, successReg=false, showReg=false, errorAuth=''" v-if="isShowBasket || showAuto || showReg" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
+  <div @click="showAuto=false, successReg=false, showReg=false, errorAuth='', isShowPhoto=false" v-if="isShowBasket || showAuto || showReg || isShowPhoto" class="fixed top-0 left-0 bg-black z-10 w-full h-full opacity-70"></div>
   <DrawerVue v-if="isShowBasket" :basketCardsUser="basketCardsUser" :statusBasket="statusBasket" />
   <template v-if="!user?.name">
     <template v-if="showAuto">
@@ -59,7 +57,7 @@ provide('openBasket', openBasket)
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
     <HeaderVue @openBasket="openBasket" :basketCardsUser="basketCardsUser" />
 
-    <SwiperSlider v-if="route.name !== 'snickers'"/>
+    <SwiperSlider v-if="route.name !== 'sneakers'"/>
 
     <div class="px-12">
       <router-view></router-view>

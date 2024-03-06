@@ -18,7 +18,7 @@ const props = defineProps({
 
       </div>
       <div>
-        <router-link to="/"><h1 class="text-xl font-bold">Online Market Snickers</h1></router-link>
+        <router-link to="/"><h1 class="text-xl font-bold">Online Market Sneakers</h1></router-link>
         <router-link to="/"><h2 class="text-sm text-gray-400">Магазин лучших кроссовок</h2></router-link>
       </div>
     </div>

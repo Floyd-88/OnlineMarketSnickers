@@ -8,6 +8,27 @@ const modules = [Navigation]
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+import { useCounterStore } from '@/stores/root'
+
+const rootStore = useCounterStore()
+
+const card =   {
+    "id": 1,
+    "name": "Мужские Кроссовки Nike Blazer Mid Suede",
+    "photo": "/sneakers/sneakers_1.jpg",
+    "price": 12999,
+    "brand": "Nike",
+    "season": "Лето",
+    "guarantee": "12",
+    "upper_material": "63% полиэстер, 37% синтетическая кожа",
+    "lining_material": "100% полиэстер",
+    "outsole_material": "термопластичная резина",
+    "maden": "Китай",
+    "desc": "Кроссовки Nike M2K Tekno – современное переосмысление культовой модели кроссовок линейки «Monarch». При переиздании модели в дизайне верхней части появились простроченные накладки, которые помимо эстетики несут и практичную нагрузку, создавая фиксирующий стопу каркас. Верхняя часть кроссовок изготавливается из сочетания кожи и текстиля, что придает обуви легкий вес. Легкая подошва изготавливается из пеноматериала с использованием в пяточной части фиксирующей вставки из TPU. Волнообразные боковые линии подошвы придают кроссовкам особый стиль. Боковых «свуша» на кроссовках M2K Tekno теперь два — один среднего размера, другой маленький и вышит. Сзади появилась пластиковая вставка, которая делает общий силуэт более современным.",
+    "gender": "Мужские",
+    "slider_photo": "/sneakers/1/1.jpeg, /sneakers/1/2.jpeg, /sneakers/1/3.jpeg, /sneakers/1/4.jpeg"
+  }
+
 const images = ref([{
           id: 1,
           imageUrl: '/baner/baner_1.png'
@@ -39,7 +60,9 @@ const images = ref([{
                         <img class="w-40 p-4" src="/brand.png" alt="brand">
                         <div class="pl-20">
                             <h2 class="text-4xl opacity-80 mb-6 font-bold"><span class="text-lime-600">Stan Smith</span>, <br> Forever!</h2>
-                            <button class="barder opacity-80 rounded-3xl bg-lime-600 text-white text-lg py-2 px-12" type="button">Купить</button>
+                            <button class="barder opacity-80 rounded-3xl bg-lime-600 text-white text-lg py-2 px-12" type="button"
+                            @click="rootStore.addCardBasket(card)"
+                            >Купить</button>
                         </div>
                     </div>
                     <div>

@@ -12,7 +12,7 @@ let props = defineProps({
 
 function checkAuto() {
   if(user.value?.id) {
-    rootStore.buySnickers(user.value?.id)
+    rootStore.buySneakers(user.value?.id)
   } else {
     router.push('profile')
   }

@@ -10,7 +10,7 @@ defineProps({
 
 <template>
     <div class="flex items-center border rounded-xl p-2">
-        <img class="w-20 h-20" :src="basketCard.photo" alt="snickers">
+        <img class="w-20 h-20" :src="basketCard.photo" alt="sneakers">
         <div class="flex ml-2">
             <div class="flex flex-col flex-1">
                 <p>{{ basketCard.name }} </p>
