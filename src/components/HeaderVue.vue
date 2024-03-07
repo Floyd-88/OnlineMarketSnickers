@@ -11,8 +11,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <header class="flex justify-between items-center pt-10 px-12 pb-8 border-b-2 border-gray-300 relative">
-    <div class="flex items-center gap-4">
+  <header class="flex flex-col lg:flex-row justify-between items-center pt-10 px-12 pb-8 border-b-2 border-gray-300 relative">
+    <div class="flex flex-col text-center m-auto pt-5 pb-5 lg:pb-0 sm:pt-0 sm:text-left sm:m-0 sm:flex-row items-center gap-4">
       <div>
         <router-link to="/"><img src="/logo.png" alt="" /></router-link>
 
@@ -23,15 +23,15 @@ const props = defineProps({
       </div>
     </div>
     <div>
-      <ul class="flex gap-10 text-gray-500">
+      <ul class="flex gap-10 items-center text-gray-500">
         <li @click="$emit('openBasket', true)" class="flex gap-2 hover:text-black cursor-pointer font-medium">
           <img src="/icons/basket.svg" alt="" />
-          <p>{{  props.basketCardsUser.reduce((accum, b) => accum + b.price, 0).toLocaleString() }} руб.</p>
+          <p class="flex">{{  props.basketCardsUser.reduce((accum, b) => accum + b.price, 0).toLocaleString() }} руб.</p>
         </li>
         <router-link to="/favorite">
           <li class="flex gap-2 hover:text-black cursor-pointer font-medium">
           <img src="/icons/heart.svg" alt="" />
-          <p>Закладки</p>
+          <p class="hidden sm:flex">Закладки</p>
         </li>
         </router-link>
 
@@ -39,11 +39,11 @@ const props = defineProps({
           <li class="flex gap-2 hover:text-black cursor-pointer font-medium">
             <template v-if="user?.name">
               <img src="/icons/prof.svg" alt="" />
-              <p >Профиль</p>
+              <p class="hidden sm:flex">Профиль</p>
             </template>
             <template v-else>
               <img src="/icons/come.svg" alt="" />
-              <p >Войти</p>
+              <p class="hidden sm:flex">Войти</p>
             </template>
           </li>
         </router-link>

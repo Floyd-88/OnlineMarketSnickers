@@ -56,8 +56,9 @@ provide('openBasket', openBasket)
 
   <div class="w-4/5 m-auto bg-white rounded-t-xl mt-16 shadow-2xl">
     <HeaderVue @openBasket="openBasket" :basketCardsUser="basketCardsUser" />
-
-    <SwiperSlider v-if="route.name !== 'sneakers'"/>
+    <div class="hidden xl:flex">
+      <SwiperSlider v-if="route.name !== 'sneakers'"/>
+    </div>
 
     <div class="px-12">
       <router-view></router-view>

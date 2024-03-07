@@ -76,8 +76,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-between mt-8 mb-8">
-    <h2 class="text-3xl font-bold">Закладки</h2>
+  <div class="flex flex-col md:flex-row items-center justify-between mt-8 mb-8">
+    <h2 class="text-xl sm:text-3xl font-bold mb-6 md:mb-0">Закладки</h2>
     <FiltersSearch />
   </div>
 

@@ -12,8 +12,8 @@ onMounted(()=> rootStore.getOrderCards())
 </script>
 
 <template>
-  <div class="flex items-center justify-between mt-8 mb-8">
-    <h2 class="text-3xl font-bold">Мои покупки</h2>
+  <div class="flex items-center justify-center md:justify-between mt-8 mb-8">
+    <h2 class="text-xl sm:text-3xl font-bold">Мои покупки</h2>
   </div>
   <template v-if="buyCards.length > 0">
     <div class="border-b mb-8" v-for="(cards, index) in buyCards"

@@ -20,11 +20,17 @@ const router = useRouter()
 rootStore.getSneakers(route.query.id)
 
 const fullImg = ref("")
+const sizeX = ref(document.documentElement.clientWidth)
 
 function showFullImg(image) {
+  if(sizeX.value < 768) return 
   isShowPhoto.value = true
   fullImg.value = image
 }
+
+window.addEventListener('resize' , () => {
+  sizeX.value = document.documentElement.clientWidth;
+})
 </script>
 
 <template>
@@ -38,7 +44,7 @@ function showFullImg(image) {
         <h3 class="text-base md:text-2xl font-bold">{{ sneakers?.name || "" }}</h3>
       </div>
       <button
-        class="px-2 py-1 h-max border-2 text-white font-semibold border-lime-500 bg-lime-500 hover:bg-lime-600 shadow-md"
+        class="hidden md:flex px-2 py-1 h-max border-2 text-white font-semibold border-lime-500 bg-lime-500 hover:bg-lime-600 shadow-md"
         @click="router.go(-1)"
       >
         Вернуться назад
@@ -47,7 +53,7 @@ function showFullImg(image) {
     <div>
       <ul class="flex my-2">
         <li
-          class="px-2 py-1 border border-indigo-500 bg-indigo-500 font-bold text-2xl text-white"
+          class="px-2 py-1 border border-indigo-500 bg-indigo-500 font-bold text-base md:text-2xl text-white"
         >
           {{ sneakers?.price || ""}} руб.
         </li>
@@ -55,15 +61,15 @@ function showFullImg(image) {
     </div>
 
     <div class="mt-3">
-      <div class="flex flex-col items-center sm:flex-row sm:space-x-2 h-80">
-        <div class="basis-3/6 h-full border pb-2 mr-4 sm:pb-0">
+      <div class="flex flex-col items-center sm:flex-row sm:space-x-2 sm:h-80">
+        <div class="w-full flex justify-center  sm:basis-3/6 h-full border mb-2 sm:mr-4 sm:mb-0">
           <img
-            class="flex items-center justify-center w-auto h-full"
+            class="flex items-center justify-center w-auto h-auto"
             :src="sneakers?.photo"
           />
         </div>
 
-        <div class="flex flex-col justify-between basis-3/6 overflow-hidden h-full">
+        <div class="flex flex-col justify-between w-full sm:basis-3/6 overflow-hidden h-80 sm:h-full">
           <swiper
           v-if="sneakers?.slider_photo"
             class=""
@@ -94,14 +100,14 @@ function showFullImg(image) {
             </div>
           </swiper>
 
-          <div class="mt-2 flex flex-row gap-3">
+          <div class="mt-2 flex flex-col lg:flex-row gap-3">
             <div
               class="basis-1/2 gap-2 flex justify-center items-center p-2 rounded-md border-2 border-green-500 bg-white hover:bg-green-200 cursor-pointer transition active:bg-green-300"
               :class="{ 'bg-gray-200': sneakers.isLikeCard }"
               @click="rootStore.addLikeCard(sneakers)"
               >
-              <div class="font-bold text-xl">
-                <span >Добавить в закладки</span>
+              <div class="font-bold text-base md:text-xl text-center">
+                <span>Добавить в закладки</span>
               </div>
             </div>
 
@@ -111,7 +117,7 @@ function showFullImg(image) {
               @click="rootStore.addCardBasket(sneakers)"
               >
               <div class="flex items-center">
-                <span class="font-bold text-xl" >Купить</span>
+                <span class="font-bold text-base md:text-xl" >Купить</span>
               </div>
             </div>
           </div>

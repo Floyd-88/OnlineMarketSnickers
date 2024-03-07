@@ -57,7 +57,7 @@ function handleSubmit() {
 </script>
 
 <template>
-    <div class="flex flex-col text-center p-4 rounded-xl shadow-lg z-20 w-96 h-auto bg-slate-200 right-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div class="flex flex-col text-center p-4 rounded-xl shadow-lg z-20 w-80 sm:w-96 h-auto bg-slate-200 right-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <form v-if="!successReg"  @submit.prevent="handleSubmit" novalidate>
         <h2 class="mb-4 text-lg font-semibold">Создать новую учетную запись!</h2>
   

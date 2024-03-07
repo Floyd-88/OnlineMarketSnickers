@@ -55,7 +55,7 @@ const images = ref([{
         :navigation="{ nextEl: '.nextArrow', prevEl: '.prevArrow'}"
     >
             <swiper-slide class="relative" style="display: flex; justify-content: center;" v-for="image in images" :key="image.id">
-                <div class="rounded-2xl flex justify-between" style="width: 960px; height: 300px; background-color: #F4EFE9;">
+                <div class="rounded-2xl flex justify-between items-center" style="width: 960px; height: 300px; background-color: #F4EFE9;">
                     <div class="flex flex-col">
                         <img class="w-40 p-4" src="/brand.png" alt="brand">
                         <div class="pl-20">
